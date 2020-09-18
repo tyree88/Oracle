@@ -19,8 +19,8 @@ The Bulk delete script uses the IDCS API. This is how to navigate through it
    - 2aa. the count variable will be used to determine how many items per page are allowed for the pull. 
    - 2ab. this is important because it will determnine how many ids will be returned. So if you do not pull enough pages it will not delete all the users desired
 - 2b. pass json response to a get users function
-3. the getUsers function parses through the returned API to get the "groups" of each user. 
 
+3. the getUsers function parses through the returned API to get the "groups" of each user. 
  -  3a. group returns a dict that has the key "display" - shows the group names associated with the user 
  -  3b. the value of the key "display" is the name of the group in IDCS
  -  3c. if the users are in group 'OCI_Administrators' append to the admins list
