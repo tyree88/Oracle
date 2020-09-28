@@ -2,6 +2,7 @@ import http.client
 import mimetypes
 import ssl 
 import json
+import math
 from pprint import pprint
 
 """
@@ -103,21 +104,17 @@ def deleteUsers(users):
   for user in users:
     print(user)    
     conn.request("DELETE", "/admin/v1/Users/"+user+"?forceDelete=true", payload, headers)
+    """
+    do bulk endpoint to delete multiple user
+    address the payload bulk delete
+    
+    """
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
 
+def filterUsers():
   
-  
-def main(): 
-  try:
-    _create_unverified_https_context = ssl._create_unverified_context
-  except expression as identifier:
-    #Legacy python that doesnt verify HTTPS certificated by default
-    pass
-  else:
-    # Handle target environment that doesnt support HTTPS verification 
-    ssl._create_default_https_context = _create_unverified_https_context
   """
   - make sure to refresh the token whenver authorization has failed
   - change in the delete users function too
@@ -132,9 +129,20 @@ def main():
     'Authorization': 'Bearer '+token,
     'Content-Type': 'application/json'
   }
+  """
+  While resources are not empty iterate on start index retreving 1000 users per page
+  - divide a thousand by the total users then round down to find the number of thousands for start index 
+  - find the remainder of the number of hundred to get the start index from there.
   
-  conn.request("GET", "/admin/v1/Users?count=1500&startIndex=0&attributes=groups", payload, headers)
+  """
   
+  OCI_Administrators = "874fda9c517f4d85a10bc191909a2326" #group ID Number you want to enter.
+  
+  startIndex = "1"
+  conn.request("GET", "/admin/v1/Users?count=1000&attributes=groups&filter=groups.value+ne+%22"+OCI_Administrators+"%22+&sortBy=userName&startIndex="+startIndex, payload, headers)
+  """
+  conn.request("GET", "/admin/v1/Users?attributes=groups&filter=groups.display ne \"874fda9c517f4d85a10bc191909a2326\" &sortBy=userName&startIndex=1",  
+  """
   res = conn.getresponse()
   print(f'res is type {type(res)}\n')
   
@@ -143,13 +151,32 @@ def main():
   
   data_decoded = (data.decode("utf-8"))
   #print(f'data_decoded is {data_decoded}')
-  
   json_response = json.loads(data_decoded)
-  pprint(json_response)
+  print(type(json_response))
+  total = json_response['totalResults']
+  #pprint(json_response)
+  print(total)
+  thousands = math.floor(total / 1000)
+  hundreds = total % 1000
+  print(f'there are {thousands} thousand \nthere are {hundreds} hundred')
+  return json_response
   
-  userIds = getUsers(json_response)
+  
+def main(): 
+  try:
+    _create_unverified_https_context = ssl._create_unverified_context
+  except expression as identifier:
+    #Legacy python that doesnt verify HTTPS certificated by default
+    pass
+  else:
+    # Handle target environment that doesnt support HTTPS verification 
+    ssl._create_default_https_context = _create_unverified_https_context
+ 
+  users = filterUsers()
+  #pprint(users)
+  #userIds = getUsers(json_response)
   print(f'user Ids are:\n {userIds}\n')
   idsList = list(userIds)
-  deleteUsers(idsList)
+  #deleteUsers(idsList)
   
 if __name__ == "__main__" :main()
