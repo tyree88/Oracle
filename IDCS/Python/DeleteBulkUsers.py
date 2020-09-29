@@ -15,54 +15,6 @@ getUsers:
 """
 def getUsers(users):
 
-  # print(f'users is type{type(users)}\n')
-  # pprint(users)
-  # print('\n\n')
-  # ids = set()
-  # dupids = []
-  # admins = []
-  # for key, value in users.items():
-  #   if key == "Resources":
-  #     print(f'key: {key} \n value: {value[1]} ')
-  #     print(type(value[1]))
-  #     #pprint(value)
-  #     pprint(value[1])
-  #     """Parse through fields with key values of each user"""
-  #     for user_key in value:
-  #       #print('user_key is:\n')
-  #       #pprint(user_key)
-  #       for key, value in user_key.items():
-  #         if key == "groups":
-  #           #print(f'value is: \n {value}\n')
-  #           #list(filter(lambda person: person['name'] == 'Pam', people))
-  #           dict_values = list(filter(lambda admin: admin['display'] =='OCI_Administrators', value))
-  #           if dict_values:
-  #             print(f'OCI_Administrators ids are : {user_key["id"]}')
-  #             admins.append(user_key["id"])
-  #           else:
-  #             ids.add(user_key["id"])
-  #             dupids.append(user_key["id"])
-  #             #admin.append(key['id'])
-  #           # for dict_key, dict_value in value:
-  #           #   if dict_value['display'] == 'OCI_Administrators':
-  #           #     print(f'id for this user is {user_key["id"]}')
-  #         else:
-  #           dupids.append(user_key["id"])
-  #           ids.add(user_key["id"])
-
-  #       #   user_value = user_key['idcsCreatedBy']
-  #       #   #This get the non admins
-  #       #   if user_value['display'] != 'OCI_Administrators':
-  #       #     ids.append(user_key['id'])
-
-  # #         #This gets admins
-  # #         if user_value['display']=='idcssm':
-  #           admins.append(user_key['id'])
-
-  # print(f'ids that are NOT created by idcs:\n {ids}\n')
-  # print(f'duplicate ids that are NOT created by idcs:\n {dupids}\n')
-  # print(f'admins created by idcs are:\n {admins}\n')
-  # return ids
   pass
 def getToken():
   url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
@@ -129,27 +81,6 @@ def deleteUsers(users):
   print(data.decode("utf-8"))
 
 
-  # url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
-  # conn = http.client.HTTPSConnection(url)
-  # token = getToken()
-  # payload = ''
-  # headers = {
-  #   'Authorization': 'Bearer '+token,
-  #   'Content-Type': 'application/json'
-  # }
-  # #pprint(users)
-  # for i in range(50):
-  #   print(users[i])
-  # for user in users:
-  #   print(user)
-  #   conn.request("DELETE", "/admin/v1/Users/"+user+"?forceDelete=true", payload, headers)
-  #   """
-  #   do bulk endpoint to delete multiple user
-  #   address the payload bulk delete
-  #   """
-  #   res = conn.getresponse()
-  #   data = res.read()
-  #   print(data.decode("utf-8"))
 
 def filterUsers():
   token = getToken()
@@ -247,7 +178,10 @@ def main():
   else:
     # Handle target environment that doesnt support HTTPS verification
     ssl._create_default_https_context = _create_unverified_https_context
-
+  """
+  Get the amount of users that are left. do a loop with delete. 
+  then check if users are left, if so loop through and delete until users are empty
+  """
   users = filterUsers()
   #pprint(users)
   count = 0
