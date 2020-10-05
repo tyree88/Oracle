@@ -13,14 +13,18 @@ the file in the IDCS folder contains a bulk delete python script
 4 . returns the set array into a delete function that do a total removal from all resources in the tenancy
 
 # Requirements
-Getting the Access Token to use the IDCS API. Follow The tutorial below.
+Do these below to adjust the script to fit your environment
 -
-1. https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/idcs/idcs_rest_postman_obe/rest_postman.html
+1.Getting the Access Token to use the IDCS API. Follow The tutorial below. 
+  - https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/idcs/idcs_rest_postman_obe/rest_postman.html
+2.Change the URLs variables
+![]
+ 
 
 # BULK Delete 
 The Bulk delete script uses the IDCS API. This is how to navigate through it
 - 
-1. getToken function gets an access token that is refresehed every api call and passed into a variable to process the GET pull
+1. getToken function gets an access token that is refresehed every api call and passed into a variable to process the GET pull.
 
 2. First there is a GET pull from the search all Users Api. 
  - 2a. there are added params to get a count of user input variable and the attribute groups 
