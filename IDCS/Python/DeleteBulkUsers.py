@@ -14,7 +14,6 @@ getUsers:
    4.return the ids for the non admin users
 """
 def getUsers(users):
-
   pass
 def getToken():
   url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
@@ -79,8 +78,6 @@ def deleteUsers(users):
   res = conn.getresponse()
   data = res.read()
   print(data.decode("utf-8"))
-
-
 
 def filterUsers():
   token = getToken()
@@ -179,7 +176,7 @@ def main():
     # Handle target environment that doesnt support HTTPS verification
     ssl._create_default_https_context = _create_unverified_https_context
   """
-  Get the amount of users that are left. do a loop with delete. 
+  Get the amount of users that are left. do a loop with delete.
   then check if users are left, if so loop through and delete until users are empty
   """
   users = filterUsers()
