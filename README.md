@@ -18,7 +18,7 @@ Do these below to adjust the script to fit your environment
 1.Getting the Access Token to use the IDCS API. Follow The tutorial below. 
   - https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/idcs/idcs_rest_postman_obe/rest_postman.html
 2.Change the URLs variables
-![]
+![IDCS/Images/Change URLs.png]
  
 
 # BULK Delete 
