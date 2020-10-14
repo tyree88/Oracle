@@ -5,16 +5,9 @@ import json
 import math
 from pprint import pprint
 
-"""
-getUsers:
-  Steps:
-   1.gets Resource Field
-   2.then grabs the id field (this will be based into delete api)
-   3.then you check to see if a user is an admin
-   4.return the ids for the non admin users
-"""
-def getUsers(users):
-  pass
+
+
+
 def getToken():
   url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
   conn = http.client.HTTPSConnection(url)
@@ -79,6 +72,58 @@ def deleteUsers(users):
   data = res.read()
   print(data.decode("utf-8"))
 
+
+
+
+def deleteGroups(groups):
+  if not groups:
+    return "No empty groups"
+  url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
+  conn = http.client.HTTPSConnection(url)
+  token = getToken()
+  addToPayload = ''
+  """
+  Loop through all the userIds and create a bulk delete
+  -add the userId with a force delete.
+  -for the last id do not add a common
+  """
+  for i in range(len(groups)):
+    print(i)
+    if i == len(groups)-1:
+        addToPayload += "{\r\n      \"method\": \"DELETE\",\r\n      \"path\": \"/Groups/"+groups[i]+"\"\r\n    }"
+    else:
+      addToPayload += "{\r\n      \"method\": \"DELETE\",\r\n      \"path\": \"/Groups/"+groups[i]+"\"\r\n    },"
+  #print(addToPayload)
+  payload =\
+  "{\r\n  \"schemas\":\
+      [\r\n\
+      \"urn:ietf:params:scim:api:messages:2.0:BulkRequest\"\
+      \r\n  ],\
+  \r\n  \"Operations\": \
+      [\r\n\
+        "+addToPayload+"\r\n  \
+      ]\r\n\
+    }"
+  headers = {
+    'Authorization': 'Bearer '+token,
+    'Content-Type': 'application/json'
+  }
+  conn.request("POST", "/admin/v1/Bulk", payload, headers)
+  res = conn.getresponse()
+  data = res.read()
+  print(data.decode("utf-8"))
+
+
+
+
+"""
+getUsers:
+  Steps:
+   1.gets Resource Field
+   2.then grabs the id field (this will be based into delete api)
+   3.then you check to see if a user is an admin
+   4.return the ids for the non admin users
+"""
 def filterUsers():
   token = getToken()
   url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
@@ -132,7 +177,7 @@ def filterUsers():
     }
     """
     While resources are not empty iterate on start index retreving 1000 users per page
-    - divide a thousand by the total users then round down to find the number of thousands for start index 
+    - divide a thousand by the total users then round down to find the number of thousands for start index
     - find the remainder of the number of hundred to get the start index from there.
     """
 
@@ -166,6 +211,48 @@ def filterUsers():
   return ids
 
 
+
+
+def getGroups():
+  conn = http.client.HTTPSConnection("idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com")
+  payload = ''
+  token = getToken()
+  headers = {
+    'Authorization': 'Bearer '+token,
+    'Content-Type': 'application/json'
+  }
+  conn.request("GET", "/admin/v1/Groups?count=1000&attributes=members,displayName", payload, headers)
+  res = conn.getresponse()
+  data = res.read()
+  data_decoded = (data.decode("utf-8"))
+  #create a json format
+  json_response = json.loads(data_decoded)
+  #pprint(json_response['Resources'])
+  #print(type(json_response['Resources']))
+  dictGroups = json_response['Resources']
+  all_groups = [x['displayName'] for x in json_response['Resources']]
+  all_groupIds = [x['id'] for x in json_response['Resources']]
+  groupIds =set(all_groupIds)
+  groups_with_members = []
+  groups_with_members_ids =set()
+  for group in dictGroups:
+    for key, value in group.items():
+      if key =="members":
+        groups_with_members.append(group['displayName'])
+        groups_with_members_ids.add(group['id'])
+  print(f'All groups are {all_groups}\nAll groups Ids are {all_groupIds}\nThere is a total of {len(all_groups)} groups\n')
+  print(f'Groups with members: {groups_with_members}\nAll group Ids of Groups with members are {groups_with_members_ids}\nThere is a total of {len(groups_with_members)} groups with members')
+  #get difference of all the groups and the ones with members so we get only groups with no members
+  pprint(groupIds)
+  pprint(groups_with_members_ids)
+  groups = (groupIds-groups_with_members_ids)
+  pprint(groups)
+  #return group Ids
+  return groups
+
+
+
+
 def main():
   try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -182,6 +269,8 @@ def main():
   users = filterUsers()
   #pprint(users)
   count = 0
+
+  #Delete all users not in Admin group 
   while users:
     count +=1
     userIds = filterUsers()
@@ -190,5 +279,13 @@ def main():
     deleteUsers(idsList)
     users = filterUsers()
     print(f'This is loop {count}\nThere are these users left {users}')
+
+  groups = list(getGroups())
+  #remove AllUsersId from list (this is the All Tenet User Group and Should not be removed)
+  groups.remove('AllUsersId')
+  print(f'all the groupIds of groups without members are:{groups}')
+  #delete all the empty groups
+  deleteGroups(groups)
+
 
 if __name__ == "__main__" :main()
