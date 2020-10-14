@@ -5,11 +5,16 @@ import json
 import math
 from pprint import pprint
 
-
+""" 
+GetToken
+- Get the token that will be used in the other functions for the Access Token in the Authoritzation String
+- for any new user enter in a new url
+"""
 
 
 def getToken():
-  url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
+  #Replace URl with the URL you use in your IDCS Environment
+  url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com" 
   conn = http.client.HTTPSConnection(url)
   payload = 'grant_type=client_credentials&scope=urn%3Aopc%3Aidm%3A__myscopes__'
   headers = {
