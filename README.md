@@ -15,9 +15,10 @@ the file in the IDCS folder contains a bulk delete python script
 # Requirements
 Do these below to adjust the script to fit your environment
 -
-1.Getting the Access Token to use the IDCS API. Follow The tutorial below. 
+- 1.Getting the Access Token to use the IDCS API. Follow The tutorial below. 
   - https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/idcs/idcs_rest_postman_obe/rest_postman.html
-2.Change the URLs variables
+  
+- 2.Change the URLs variables
 ![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
  
 
