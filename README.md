@@ -22,7 +22,7 @@ Do these below to adjust the script to fit your environment
     ![Create the Application in IDCS](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.07.06%20PM.png?raw=true)
     
     - Set up the Environment Variables in Postman
-    ![Postman Setup](IDCS/Images/Screen Shot 2020-10-22 at 1.07.46 PM.png)
+    ![Postman Setup](IDCS/Images/Screen Shot 2020-10-22 at 1.07.46 PM.png?raw=true)
     
   
 - 2.Change the URLs variables
