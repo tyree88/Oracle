@@ -18,8 +18,11 @@ Do these below to adjust the script to fit your environment
 - 1.Getting the Access Token to use the IDCS API. Follow The tutorial below. 
   - https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/idcs/idcs_rest_postman_obe/rest_postman.html
   
-    Here are images of the instructions provided above^ 
-    (https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.07.06%20PM.png?raw=true)
+    - Here are images of the instructions provided above^ 
+    ![Create the Application in IDCS](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.07.06%20PM.png?raw=true)
+    
+    - Set up the Environment Variables in Postman
+    ![Postman Setup](IDCS/Images/Screen Shot 2020-10-22 at 1.07.46 PM.png)
     
   
 - 2.Change the URLs variables
