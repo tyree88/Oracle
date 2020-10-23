@@ -13,10 +13,11 @@ GetToken
 
 
 def getToken():
-  #Replace URl with the URL you use in your IDCS Environment
-  url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com" 
+  #url 1 that you must change
+  url = "idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com"
   conn = http.client.HTTPSConnection(url)
   payload = 'grant_type=client_credentials&scope=urn%3Aopc%3Aidm%3A__myscopes__'
+  #change the Auth from the test code in Postman
   headers = {
   'Authorization': 'Basic ZWQzYjBjMGMxNGU0NGQyZDllZTA0NDVjMGIyNjExNjc6NmZjNjY1ZGUtMGRiYS00NGY5LTljZDQtMWQ4NmU3ZDFlYTU4',
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -31,7 +32,6 @@ def getToken():
   access_token = json_response['access_token']
   #print(f'acces_token is {access_token}')
   return access_token
-
 """
 deleteUsers:
   Steps:
@@ -50,6 +50,8 @@ def deleteUsers(users):
   Loop through all the userIds and create a bulk delete
   -add the userId with a force delete.
   -for the last id do not add a common
+  - do a bulk call of only 100
+    - do 10 calls of 100 deleting 1000 users
   """
   for i in range(len(users)):
     print(i)
@@ -145,7 +147,7 @@ def filterUsers():
   - create a json response of user Ids that are not in group "OCI_Administrators"
   - based on the totalResults get the number of thousands and hundered to increment startIndex by
   """
-  OCI_Administrators = "874fda9c517f4d85a10bc191909a2326" #group ID Number you want to enter.
+  OCI_Administrators = "00b2fd1e877a4b0a99be3997409d14ea" #group ID Number you want to enter.
   count = 1
   startIndex = str(count)
   conn.request("GET", "/admin/v1/Users?count=1000&attributes=groups&filter=groups.value+ne+%22"+OCI_Administrators+"%22+&sortBy=userName&startIndex="+startIndex, payload, headers)
@@ -173,7 +175,7 @@ def filterUsers():
   - takes the last hundered and applies to the startIndex to delete the rest.
   Prints out how many users are left.
   """
-  while json_response['Resources']:
+  while count <=total:
     print(count)
     payload = ''
     headers = {
@@ -226,34 +228,34 @@ def getGroups():
     'Authorization': 'Bearer '+token,
     'Content-Type': 'application/json'
   }
-  conn.request("GET", "/admin/v1/Groups?count=1000&attributes=members,displayName", payload, headers)
+  conn.request("GET", "/admin/v1/Groups?count=1000&attributes=members,displayName&filter=not(members+pr)", payload, headers)
   res = conn.getresponse()
   data = res.read()
   data_decoded = (data.decode("utf-8"))
   #create a json format
   json_response = json.loads(data_decoded)
-  #pprint(json_response['Resources'])
+  pprint(json_response)
   #print(type(json_response['Resources']))
   dictGroups = json_response['Resources']
   all_groups = [x['displayName'] for x in json_response['Resources']]
   all_groupIds = [x['id'] for x in json_response['Resources']]
   groupIds =set(all_groupIds)
-  groups_with_members = []
-  groups_with_members_ids =set()
-  for group in dictGroups:
-    for key, value in group.items():
-      if key =="members":
-        groups_with_members.append(group['displayName'])
-        groups_with_members_ids.add(group['id'])
+  # groups_with_members = []
+  # groups_with_members_ids =set()
+  # for group in dictGroups:
+  #   for key, value in group.items():
+  #     if key =="members":
+  #       groups_with_members.append(group['displayName'])
+  #       groups_with_members_ids.add(group['id'])
   print(f'All groups are {all_groups}\nAll groups Ids are {all_groupIds}\nThere is a total of {len(all_groups)} groups\n')
-  print(f'Groups with members: {groups_with_members}\nAll group Ids of Groups with members are {groups_with_members_ids}\nThere is a total of {len(groups_with_members)} groups with members')
+  #print(f'Groups with members: {groups_with_members}\nAll group Ids of Groups with members are {groups_with_members_ids}\nThere is a total of {len(groups_with_members)} groups with members')
   #get difference of all the groups and the ones with members so we get only groups with no members
   pprint(groupIds)
-  pprint(groups_with_members_ids)
-  groups = (groupIds-groups_with_members_ids)
-  pprint(groups)
-  #return group Ids
-  return groups
+  # pprint(groups_with_members_ids)
+  # groups = (groupIds-groups_with_members_ids)
+  pprint(f'the total numbers of groups are {len(groupIds)}')
+  return groupIds
+  #return groups
 
 
 
@@ -275,7 +277,7 @@ def main():
   #pprint(users)
   count = 0
 
-  #Delete all users not in Admin group 
+  #Delete all users not in Admin group
   while users:
     count +=1
     userIds = filterUsers()
@@ -288,9 +290,18 @@ def main():
   groups = list(getGroups())
   #remove AllUsersId from list (this is the All Tenet User Group and Should not be removed)
   groups.remove('AllUsersId')
-  print(f'all the groupIds of groups without members are:{groups}')
+  print(f'all the groupIds of groups without All Tenet User Group are:{groups}')
+  print(f'length all the groupIds of groups without All Tenet User Group are:{len(groups)}')
+
   #delete all the empty groups
   deleteGroups(groups)
+  groups = list(getGroups())
+  print(f'all the groupIds of groups without members are:{groups}')
+  print(f'len all the groupIds of groups without members are:{len(groups)}')
+  if len(groups)> 1:
+    groups.remove('AllUsersId')
+    deleteGroups(groups)
+
 
 
 if __name__ == "__main__" :main()
