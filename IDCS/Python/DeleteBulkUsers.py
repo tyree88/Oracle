@@ -188,7 +188,7 @@ def filterUsers():
     - find the remainder of the number of hundred to get the start index from there.
     """
 
-    OCI_Administrators = "874fda9c517f4d85a10bc191909a2326" #group ID Number you want to enter.
+    OCI_Administrators = "00b2fd1e877a4b0a99be3997409d14ea" #group ID Number you want to enter.
     startIndex = str(count)
     conn.request("GET", "/admin/v1/Users?count=1000&attributes=groups&filter=groups.value+ne+%22"+OCI_Administrators+"%22+&sortBy=userName&startIndex="+startIndex, payload, headers)
     res = conn.getresponse()
@@ -237,22 +237,21 @@ def getGroups():
   pprint(json_response)
   #print(type(json_response['Resources']))
   dictGroups = json_response['Resources']
+  '''
+    Below does:
+      - a list comprehnsion to gather all the group names of groups without members
+        - this is for testing purposes to make sure the groups you have are correct
+      - a list comprehnsion to gather all the group IDs of groups without members
+      - puts all the groupIds in a set because all groups are unique
+
+  '''
   all_groups = [x['displayName'] for x in json_response['Resources']]
   all_groupIds = [x['id'] for x in json_response['Resources']]
   groupIds =set(all_groupIds)
-  # groups_with_members = []
-  # groups_with_members_ids =set()
-  # for group in dictGroups:
-  #   for key, value in group.items():
-  #     if key =="members":
-  #       groups_with_members.append(group['displayName'])
-  #       groups_with_members_ids.add(group['id'])
   print(f'All groups are {all_groups}\nAll groups Ids are {all_groupIds}\nThere is a total of {len(all_groups)} groups\n')
-  #print(f'Groups with members: {groups_with_members}\nAll group Ids of Groups with members are {groups_with_members_ids}\nThere is a total of {len(groups_with_members)} groups with members')
   #get difference of all the groups and the ones with members so we get only groups with no members
   pprint(groupIds)
-  # pprint(groups_with_members_ids)
-  # groups = (groupIds-groups_with_members_ids)
+
   pprint(f'the total numbers of groups are {len(groupIds)}')
   return groupIds
   #return groups
