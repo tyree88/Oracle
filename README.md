@@ -24,6 +24,10 @@ Do these below to adjust the script to fit your environment
     - Set up the Environment Variables in Postman
     ![Postman Setup](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.07.46%20PM.png?raw=true)
     
+    ![Import the Postman Collection](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.08.14%20PM.png?raw=true)
+    
+    ![Request the Access Token](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-10-22%20at%201.08.31%20PM.png?raw=true)
+    
   
 - 2.Change the URLs variables
 ![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
