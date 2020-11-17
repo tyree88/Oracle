@@ -91,7 +91,7 @@ the file in the IDCS folder contains a [bulk delete users](https://github.com/ty
 
 
  ### Run the script
- -1. run the script in the console by typing "python 3 DeleteBulkUsers.py"
+ -1. run the script in the console by typing "python 3 DeleteBulkGroups.py"
 
 
 # BULK Delete 
