@@ -22,6 +22,8 @@ Do these below to adjust the script to fit your environment
 # IDCS 
 the file in the IDCS folder contains a [bulk delete users](https://github.com/tyree88/Oracle/blob/master/IDCS/Python/DeleteBulkUsers.py)python script, [bulk delete groups](https://github.com/tyree88/Oracle/blob/master/IDCS/Python/DeleteBulkGroups.py) python script, [bulk delete users and groups](https://github.com/tyree88/Oracle/blob/master/IDCS/Python/DeleteBulkUsers%26Groups.py) python script
 
+ 
+
 ## Bulk Delete users and groups
 ### What the script does
 - 1 . This script grabs the users in group OCI_Administrators
@@ -39,6 +41,57 @@ the file in the IDCS folder contains a [bulk delete users](https://github.com/ty
  
  -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
  ![you get the Id number you are looking for by searching on postman](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-17%20at%2010.15.37%20AM.png?raw=true)
+
+
+ ### Run the script
+ -1. run the script in the console by typing "python 3 DeleteBulkUsers&Groups.py"
+
+
+## Bulk Delete users
+### What the script does
+- 1 . This script grabs the users in group OCI_Administrators
+- 2 . Filters out the ids for each user in this group into an admins array
+- 3 . Passes the rest of the users in a set array so only unique values are entered
+- 4 . returns the set array into a delete function that do a total removal from all resources in the tenancy
+
+### Change in the script
+- 1.Change the URLs variables
+![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
+ 
+ 
+ -2. Change the Group ID Variable
+ ![Find each Group Variable and Change it to the right id number](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-16%20at%204.18.45%20PM.png?raw=true)
+ 
+ -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
+ ![you get the Id number you are looking for by searching on postman](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-17%20at%2010.15.37%20AM.png?raw=true)
+
+
+ ### Run the script
+ -1. run the script in the console by typing "python 3 DeleteBulkUsers.py"
+ 
+ 
+
+## Bulk Delete groups
+### What the script does
+- 1 . This script grabs the users in group OCI_Administrators
+- 2 . Filters out the ids for each user in this group into an admins array
+- 3 . Passes the rest of the users in a set array so only unique values are entered
+- 4 . returns the set array into a delete function that do a total removal from all resources in the tenancy
+
+### Change in the script
+- 1.Change the URLs variables
+![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
+ 
+ 
+ -2. Change the Group ID Variable
+ ![Find each Group Variable and Change it to the right id number](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-16%20at%204.18.45%20PM.png?raw=true)
+ 
+ -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
+ ![you get the Id number you are looking for by searching on postman](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-17%20at%2010.15.37%20AM.png?raw=true)
+
+
+ ### Run the script
+ -1. run the script in the console by typing "python 3 DeleteBulkUsers.py"
 
 
 # BULK Delete 
@@ -59,5 +112,3 @@ The Bulk delete script uses the IDCS API. This is how to navigate through it
  
 4. deleteUsers gets an access token from getToken() and does DELETE request for each id in the id array
  -  4a. the DELETE request takes in a user inside a for loop that does a 'forceDelete' so it removes all instances with the user
-
-
