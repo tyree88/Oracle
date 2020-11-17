@@ -35,7 +35,7 @@ the file in the IDCS folder contains a [bulk delete users](https://github.com/ty
  
  
  -2. Change the Group ID Variable
- ![Find each Group Variable and Change it to the right id number]
+ ![Find each Group Variable and Change it to the right id number](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-16%20at%204.18.45%20PM.png?raw=true)
  
  -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
  ![you get the Id number you are looking for by searching on postman](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-17%20at%2010.15.37%20AM.png?raw=true)
