@@ -73,8 +73,51 @@ def deleteGroups(groups):
   data = res.read()
   print(data.decode("utf-8"))
 
+def getGroupsWithMembers():
+  conn = http.client.HTTPSConnection("idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com")
+  payload = ''
+  token = getToken()
+  headers = {
+    'Authorization': 'Bearer '+token,
+    'Content-Type': 'application/json'
+  }
+  conn.request("GET", "/admin/v1/Groups?count=1000&attributes=members,displayName", payload, headers)
+  res = conn.getresponse()
+  data = res.read()
+  data_decoded = (data.decode("utf-8"))
+  #create a json format
+  json_response = json.loads(data_decoded)
+  pprint(json_response)
+  #print(type(json_response['Resources']))
+  dictGroups = json_response['Resources']
+  '''
+    Below does:
+      - a list comprehnsion to gather all the group names of groups without members
+        - this is for testing purposes to make sure the groups you have are correct
+      - a list comprehnsion to gather all the group IDs of groups without members
+      - puts all the groupIds in a set because all groups are unique
 
-def getGroups():
+  '''
+  all_groups = [x['displayName'] for x in json_response['Resources']]
+  all_groupIds = [x['id'] for x in json_response['Resources']]
+  groupIds =set(all_groupIds)
+  print(f'All groups are {all_groups}\nAll groups Ids are {all_groupIds}\nThere is a total of {len(all_groups)} groups\n')
+  #get difference of all the groups and the ones with members so we get only groups with no members
+  pprint(groupIds)
+
+  pprint(f'the total numbers of groups are {len(groupIds)}')
+  return groupIds
+  #return groups
+
+  """
+  RUN THIS getGroupsWithoutMembers() function AFTER YOU DELETE ALL USERS
+  - this function gets the groups without members
+  - so deleting all users will result in many empty grouos
+  - this function below gathers those groups for deletion
+  """
+
+
+def getGroupsWithoutMembers():
   conn = http.client.HTTPSConnection("idcs-58bd1066a98f41198b51f1c4f68610ef.identity.oraclecloud.com")
   payload = ''
   token = getToken()
@@ -121,20 +164,26 @@ def main():
     # Handle target environment that doesnt support HTTPS verification
     ssl._create_default_https_context = _create_unverified_https_context
 
-  groups = list(getGroups())
+  groups_with_members = list(getGroupsWithMembers())
   #remove AllUsersId from list (this is the All Tenet User Group and Should not be removed)
-  groups.remove('AllUsersId')
-  print(f'all the groupIds of groups without All Tenet User Group are:{groups}')
-  print(f'length all the groupIds of groups without All Tenet User Group are:{len(groups)}')
+  groups_with_members.remove('AllUsersId')
+  print(f'\nall the groupIds of groups without All Tenet User Group are:{groups_with_members}\n')
+  print(f'\nlength all the groupIds of groups without All Tenet User Group are:{len(groups_with_members)}\n')
 
   #delete all the empty groups
-  deleteGroups(groups)
-  groups = list(getGroups())
-  print(f'all the groupIds of groups without members are:{groups}')
-  print(f'len all the groupIds of groups without members are:{len(groups)}')
-  if len(groups)> 1:
-    groups.remove('AllUsersId')
-    deleteGroups(groups)
+  print("Have you Deleted all the users and want to delete empty groups?\n Enter: [Y/N]")
+  x = input()
+  print(f'you entered {x}')
+  if x.lower() == 'y':
+    print("Running functions to get groups without memebers and delete grouos")
+    groups_without_members = list(getGroupsWithoutMembers())
+    print(f'all the groupIds of groups without members are:{groups_without_members}')
+    print(f'len all the groupIds of groups without members are:{len(groups_without_members)}')
+    deleteGroups(groups_without_members)
+    if len(groups_without_members)> 1:
+      groups_without_members.remove('AllUsersId')
+      deleteGroups(groups_without_members)
+
 
 
 
