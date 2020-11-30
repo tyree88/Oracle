@@ -1,9 +1,13 @@
+from concurrent.futures import thread
 import http.client
 import mimetypes
 import ssl
 import json
 import math
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Thread
 from pprint import pprint
+import time
 
 """
 GetToken
@@ -174,6 +178,33 @@ def filterUsers():
   print(f'\ntotal ids are {len(ids)}\n')
   return ids
 
+def deleteLoop():
+  tic = time.perf_counter()
+
+  """
+  Get the amount of users that are left. do a loop with delete.
+  then check if users are left, if so loop through and delete until users are empty
+  """
+  users = filterUsers()
+  #pprint(users)
+  count = 0
+  #Delete all users not in Admin group
+  while users:
+    count +=1
+    userIds = filterUsers()
+    print(f'user Ids are:\n {userIds}\n')
+    idsList = list(userIds)
+    deleteUsers(idsList)
+    users = filterUsers()
+    print(f'This is loop {count}\nThere are these users left {users}')
+  toc = time.perf_counter()
+  seconds = toc - tic
+  hours = seconds//3600
+  minutes = seconds //60
+  print(f"finishd deleting users in {toc - tic:0.4f} seconds")
+  print(f"finishd deleting users in {minutes} minutes")
+  print(f"finishd deleting users in {hours} hours")
+
 
 def main():
   try:
@@ -184,23 +215,22 @@ def main():
   else:
     # Handle target environment that doesnt support HTTPS verification
     ssl._create_default_https_context = _create_unverified_https_context
-  """
-  Get the amount of users that are left. do a loop with delete.
-  then check if users are left, if so loop through and delete until users are empty
-  """
-  users = filterUsers()
-  #pprint(users)
-  count = 0
 
-  #Delete all users not in Admin group
-  while users:
-    count +=1
-    userIds = filterUsers()
-    print(f'user Ids are:\n {userIds}\n')
-    idsList = list(userIds)
-    deleteUsers(idsList)
-    users = filterUsers()
-    print(f'This is loop {count}\nThere are these users left {users}')
+  "Threads"
+  t1 = Thread(target=deleteLoop)
+  t2 = Thread(target=deleteLoop)
+  t1.start()
+  t2.start()
+
+  # #Delete all users not in Admin group
+  # while users:
+  #   count +=1
+  #   userIds = filterUsers()
+  #   print(f'user Ids are:\n {userIds}\n')
+  #   idsList = list(userIds)
+  #   deleteUsers(idsList)
+  #   users = filterUsers()
+  #   print(f'This is loop {count}\nThere are these users left {users}')
 
 
 

@@ -3,6 +3,7 @@ import mimetypes
 import ssl
 import json
 import math
+import time
 from pprint import pprint
 
 """
@@ -272,6 +273,8 @@ def main():
   Get the amount of users that are left. do a loop with delete.
   then check if users are left, if so loop through and delete until users are empty
   """
+  tic = time.perf_counter() # start timer
+
   users = filterUsers()
   #pprint(users)
   count = 0
@@ -300,6 +303,15 @@ def main():
   if len(groups)> 1:
     groups.remove('AllUsersId')
     deleteGroups(groups)
+
+  toc = time.perf_counter() #end timer
+  seconds = toc - tic
+  hours = seconds//3600
+  minutes = seconds //60
+  print(f"finishd deleting users in {toc - tic:0.4f} seconds")
+  print(f"finishd deleting users in {minutes} minutes")
+  print(f"finishd deleting users in {hours} hours")
+
 
 
 
