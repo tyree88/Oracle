@@ -59,7 +59,7 @@ the file in the IDCS folder contains a [bulk delete users](https://github.com/ty
 ### Change in the script
 
 - 1.Change the URLs variables
-  ![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
+  ![Change the urls](https://github.com/tyree88/Oracle/blob/0e5b5be8a13083c8519a243e4676c887fe7c57ca/IDCS/Images/ChangeURLs:ChangeAuthKey.png)
   -2. Change the Group ID Variable
   ![Find each Group Variable and Change it to the right id number](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-16%20at%204.18.45%20PM.png?raw=true)
   -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
@@ -81,7 +81,7 @@ the file in the IDCS folder contains a [bulk delete users](https://github.com/ty
 ### Change in the script
 
 - 1.Change the URLs variables
-  ![Change the urls](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Change%20URLs.png?raw=true)
+  ![Change the urls](https://github.com/tyree88/Oracle/blob/0e5b5be8a13083c8519a243e4676c887fe7c57ca/IDCS/Images/ChangeURLs:ChangeAuthKey.png)
   -2. Change the Group ID Variable
   ![Find each Group Variable and Change it to the right id number](https://github.com/tyree88/Oracle/blob/master/IDCS/Images/Screen%20Shot%202020-11-16%20at%204.18.45%20PM.png?raw=true)
   -3. Search in postman to find the group id you are looking to exclude. refer back to requirements if you get stuck.
