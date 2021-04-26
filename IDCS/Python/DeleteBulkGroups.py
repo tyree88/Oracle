@@ -17,7 +17,7 @@ def getToken():
   payload = 'grant_type=client_credentials&scope=urn%3Aopc%3Aidm%3A__myscopes__'
   #change the Auth from the test code in Postman
   headers = {
-  'Authorization': 'Basic ZWQzYjBjMGMxNGU0NGQyZDllZTA0NDVjMGIyNjExNjc6NmZjNjY1ZGUtMGRiYS00NGY5LTljZDQtMWQ4NmU3ZDFlYTU4',
+  'Authorization': 'Basic ************************************************************************',
   'Content-Type': 'application/x-www-form-urlencoded'
   }
   conn.request("POST", "/oauth2/v1/token", payload, headers)
